@@ -29,7 +29,7 @@ public class AreaAttack : ISkill
             vec = e.transform.position - GameManager.Player.transform.position;
             if (vec.magnitude < _area)
             {
-                e.Damage();
+                e.Damage(1);
                 attackCount++;
 
                 if(attackCount >= _maxAttackCount)

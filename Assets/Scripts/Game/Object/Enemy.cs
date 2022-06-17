@@ -5,11 +5,17 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IObjectPool
 {
     [SerializeField] float _speed = 10;
+    [SerializeField] int _hp = 5;
+    [SerializeField] GameObject keikennti;
     SpriteRenderer _image;
 
     void Awake()
     {
         _image = GetComponent<SpriteRenderer>();
+    }
+    void Start()
+    {
+
     }
 
     void Update()
@@ -22,12 +28,18 @@ public class Enemy : MonoBehaviour, IObjectPool
         transform.position += sub * _speed * Time.deltaTime;
     }
 
-    public void Damage()
+    public void Damage(int x)
     {
-        Destroy();
+        _hp -= x;
+        StartCoroutine("Stop");
 
-        //TODO
-        GameManager.Instance.GetExperience(1);
+        if (_hp <= 0)
+        {
+            Destroy();
+            //TODO
+            Instantiate(keikennti,this.transform.position,Quaternion.identity);
+            //GameManager.Instance.GetExperience(1);
+        }
     }
 
     //ObjectPool
@@ -47,5 +59,13 @@ public class Enemy : MonoBehaviour, IObjectPool
     {
         _image.enabled = false;
         _isActrive = false;
+    }
+
+    IEnumerator Stop()
+    {
+        //float copy = _speed;
+        _speed *= -1;
+        yield return new WaitForSeconds(0.25f);
+        _speed *= -1;
     }
 }

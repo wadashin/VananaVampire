@@ -9,11 +9,14 @@ public class GameManager
     static public GameManager Instance => _instance;
     private GameManager() { }
 
-    int _exp = 0;
-    int _level = 1;
+    public static int _exp = 0;
+    public int _level = 1;
     int _stackLevelup = 0;
     Player _player = null;
-    public void SetPlayer(Player p) { _player = p; }
+    public void SetPlayer(Player p)
+    {
+        _player = p;
+    }
     List<Enemy> _enemies = new List<Enemy>();
     List<int> _passive = new List<int>();
     SkillSelect _sklSelect = null;
@@ -29,15 +32,17 @@ public class GameManager
     public void GetExperience(int exp)
     {
         _exp += exp;
-
+        TimeScoreEXP.EXPPlus();
         //level up
         if (GameData.LevelTable.Count > _level && _exp > GameData.LevelTable[_level])
         {
             _level++;
+            TimeScoreEXP.LevelUp(_level);
 
             if (Time.timeScale > 0.99f)
             {
-                _sklSelect.SelectStart();
+                //_sklSelect.SelectStart();
+                _sklSelect.treeCanvas.SetActive(true);
                 Time.timeScale = 0;
             }
             else
@@ -49,7 +54,7 @@ public class GameManager
 
     public void LevelUpSelect(SkillSelectTable table)
     {
-        switch(table.Type)
+        switch (table.Type)
         {
             case SelectType.Skill:
                 _player.AddSkill(table.TargetId);

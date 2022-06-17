@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4663999614027680772}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1043858614243226007}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -716, y: -334.5, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 7.9616375, y: 7.961637, z: 0.7961637}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4db79804d82564a8e3405a658135f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _speed: 5
+  _hp: 5
+  keikennti: {fileID: 5369585191597226819, guid: 509125ebfc2d199469e5add295a91cbf, type: 3}
 --- !u!212 &-4663999614027680772
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -85,8 +87,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.9150943, g: 0.57418543, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 0ab39234f83e9464bb4590a74bbffeec, type: 3}
+  m_Color: {r: 1, g: 0.62660944, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

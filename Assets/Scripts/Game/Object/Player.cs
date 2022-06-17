@@ -4,15 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] float _speed = 0.1f;
     [SerializeField] float _shootTime = 0.3f;
+    [SerializeField] GameObject rollAttackObj;
+    public static GameObject useRollAttackObj;
+    [SerializeField] Slider hpBar;
+    [SerializeField] float _maxHp = 10000;
+    float hp = 0;
+
+    [SerializeField] GameObject _razorObj;
+    bool razorStart = true;
 
     List<ISkill> _skill = new List<ISkill>();
 
     float _timer = 0.0f;
+
+    static public string bulletType = "スタンダード";
+
+    IntervalTimer ttiimmeerr = new IntervalTimer();
 
     void Awake()
     {
@@ -20,6 +35,15 @@ public class Player : MonoBehaviour
 
         //初期武器
         AddSkill(1);
+    }
+    private void Start()
+    {
+        useRollAttackObj = rollAttackObj;
+        hp = _maxHp;
+        hpBar.maxValue = _maxHp;
+        hpBar.value = hp;
+        bulletType = "スタンダード";
+        ttiimmeerr.Setup(2f);
     }
 
     private void Update()
@@ -30,6 +54,36 @@ public class Player : MonoBehaviour
         transform.position += new Vector3(w * _speed * Time.deltaTime, h * _speed * Time.deltaTime, 0);
 
         _skill.ForEach(s => s.Update());
+        _skill.ForEach(s => Debug.Log(s));
+
+        
+        var list = GameManager.EnemyList;
+        Vector3 vec;
+        foreach (var e in list)
+        {
+            if (!e.IsActive) continue;
+
+            vec = e.transform.position - this.transform.position;
+            if (vec.magnitude < 2.5f)
+            {
+                hp -= 1f;
+                hpBar.value = hp;
+                if (hp <= 0)
+                {
+                    SceneManager.LoadScene("Fale");
+                }
+                break;
+            }
+        }
+
+        if(bulletType == "反射")
+        {
+            if(razorStart)
+            {
+                StartCoroutine("Razor");
+                razorStart = false;
+            }
+        }
     }
 
     public void AddSkill(int skillId)
@@ -57,6 +111,30 @@ public class Player : MonoBehaviour
             {
                 newSkill.Setup();
                 _skill.Add(newSkill);
+            }
+        }
+    }
+    IEnumerator RollAttack(int x)
+    {
+        yield return new WaitForSeconds(x);
+
+    }
+    IEnumerator Razor()
+    {
+        yield return new WaitForSeconds(10);
+        Instantiate(_razorObj);
+        StartCoroutine("Razor");
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            hp -= 1f;
+            Debug.Log(1);
+            if (hp <= 0)
+            {
+                SceneManager.LoadScene("Fale");
             }
         }
     }
